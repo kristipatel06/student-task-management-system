@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f5f7fb" />
+    <title>StudyFlow | Student Task Manager</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <a class="brand" href="/" aria-label="StudyFlow home">
+          <span class="brand-mark" aria-hidden="true">S</span>
+          <span>study<span class="brand-light">flow</span></span>
+        </a>
+        <div class="sidebar-label">WORKSPACE</div>
+        <nav aria-label="Main navigation">
+          <a class="nav-item active" href="#tasks"><span class="nav-icon" aria-hidden="true">▦</span> My tasks</a>
+          <a class="nav-item" href="#overview"><span class="nav-icon" aria-hidden="true">◷</span> Overview</a>
+        </nav>
+        <div class="sidebar-note">
+          <div class="note-icon" aria-hidden="true">✦</div>
+          <strong>Small steps add up.</strong>
+          <p>Keep your study goals in sight and make progress one task at a time.</p>
+        </div>
+        <div class="sidebar-footer"><span class="online-dot"></span> Your study space</div>
+      </aside>
+
+      <main class="main-content">
+        <header class="topbar">
+          <div>
+            <div class="eyebrow">YOUR PERSONAL STUDY PLANNER</div>
+            <h1>Good things take <span>focus.</span></h1>
+            <p class="welcome-copy">A little progress every day goes a long way.</p>
+          </div>
+          <div class="today-chip"><span aria-hidden="true">▣</span><span id="today-label"></span></div>
+        </header>
+
+        <section class="stats-grid" id="overview" aria-label="Task overview">
+          <article class="stat-card">
+            <div class="stat-top"><span class="stat-label">TOTAL TASKS</span><span class="stat-icon violet">▦</span></div>
+            <div class="stat-value" id="total-count">0</div>
+            <div class="stat-caption">On your study list</div>
+          </article>
+          <article class="stat-card">
+            <div class="stat-top"><span class="stat-label">IN PROGRESS</span><span class="stat-icon amber">◷</span></div>
+            <div class="stat-value" id="pending-count">0</div>
+            <div class="stat-caption">One step at a time</div>
+          </article>
+          <article class="stat-card">
+            <div class="stat-top"><span class="stat-label">COMPLETED</span><span class="stat-icon green">✓</span></div>
+            <div class="stat-value" id="completed-count">0</div>
+            <div class="stat-caption">Look how far you’ve come</div>
+          </article>
+        </section>
+
+        <section class="tasks-section" id="tasks">
+          <div class="section-heading">
+            <div>
+              <div class="eyebrow">STAY ON TOP OF IT</div>
+              <h2>Your tasks <span class="task-total" id="task-total-label">0</span></h2>
+            </div>
+            <button class="primary-button" id="add-task-button" type="button"><span aria-hidden="true">＋</span> Add a task</button>
+          </div>
+          <div class="toolbar">
+            <div class="filter-tabs" role="group" aria-label="Filter tasks">
+              <button class="filter-button selected" type="button" data-status="all" aria-pressed="true">All</button>
+              <button class="filter-button" type="button" data-status="pending" aria-pressed="false">Pending</button>
+              <button class="filter-button" type="button" data-status="completed" aria-pressed="false">Completed</button>
+            </div>
+            <label class="search-box">
+              <span aria-hidden="true">⌕</span>
+              <input id="search-input" type="search" placeholder="Search tasks..." aria-label="Search tasks by title" />
+              <kbd>/</kbd>
+            </label>
+          </div>
+          <div id="message" class="message" role="status" aria-live="polite"></div>
+          <div class="task-list" id="task-list" aria-live="polite"></div>
+        </section>
+        <footer class="page-footer">Made for your next big idea <span aria-hidden="true">✦</span></footer>
+      </main>
+    </div>
+
+    <dialog class="task-dialog" id="task-dialog" aria-labelledby="dialog-title">
+      <form id="task-form">
+        <div class="dialog-heading">
+          <div>
+            <div class="eyebrow">MAKE A PLAN</div>
+            <h2 id="dialog-title">Add a task</h2>
+          </div>
+          <button class="icon-button close-dialog" type="button" aria-label="Close dialog">×</button>
+        </div>
+        <input id="task-id" type="hidden" />
+        <label class="form-field">Task title <span>*</span>
+          <input id="title-input" name="title" type="text" maxlength="100" placeholder="e.g. Review lecture notes" required />
+          <small class="field-error" data-error-for="title"></small>
+        </label>
+        <label class="form-field">Description
+          <textarea id="description-input" name="description" rows="3" maxlength="500" placeholder="Add a few details to help you get started..."></textarea>
+          <small class="field-error" data-error-for="description"></small>
+        </label>
+        <div class="form-row">
+          <label class="form-field">Subject <span>*</span>
+            <input id="subject-input" name="subject" type="text" maxlength="60" placeholder="e.g. Biology" required />
+            <small class="field-error" data-error-for="subject"></small>
+          </label>
+          <label class="form-field">Priority
+            <select id="priority-input" name="priority">
+              <option value="medium">Medium</option>
+              <option value="high">High</option>
+              <option value="low">Low</option>
+            </select>
+            <small class="field-error" data-error-for="priority"></small>
+          </label>
+        </div>
+        <label class="form-field">Due date
+          <input id="due-date-input" name="dueDate" type="date" />
+          <small class="field-error" data-error-for="dueDate"></small>
+        </label>
+        <div class="dialog-actions">
+          <button class="secondary-button close-dialog" type="button">Cancel</button>
+          <button class="primary-button" type="submit" id="save-task-button">Save task <span aria-hidden="true">→</span></button>
+        </div>
+      </form>
+    </dialog>
+    <script src="/script.js" defer></script>
+  </body>
+</html>

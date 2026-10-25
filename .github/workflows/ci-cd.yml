@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Test and build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run automated tests
+        run: npm test
+
+      - name: Verify application starts
+        shell: bash
+        run: |
+          npm start > /tmp/student-task-app.log 2>&1 &
+          app_pid=$!
+          trap 'kill "$app_pid" 2>/dev/null || true' EXIT
+          for attempt in {1..20}; do
+            if curl --fail http://localhost:3000/api/tasks; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/student-task-app.log
+          exit 1
+
+      - name: Build Docker image
+        run: docker build --tag student-task-management-system:ci .
